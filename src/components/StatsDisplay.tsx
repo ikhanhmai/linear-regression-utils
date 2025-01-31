@@ -58,11 +58,9 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({ stats, manualMode })
                   <h4 className="text-sm font-medium text-gray-700">Model Fit</h4>
                   <Tooltip content={`
                     R² measures how well the regression line approximates the data points.
-                    Adjusted R² accounts for model complexity.
                     F-statistic tests if the model is significantly better than a horizontal line.
                     
                     R² = ${stats.rSquared.toFixed(4)}
-                    Adjusted R² = ${stats.adjustedRSquared.toFixed(4)}
                     F-statistic = ${stats.fStatistic.toFixed(4)}
                     F p-value = ${stats.pValueF.toFixed(4)}
                     
@@ -80,57 +78,11 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({ stats, manualMode })
                     </p>
                   </div>
                   <div>
-                    <p className="text-lg text-gray-800">Adjusted R² = {stats.adjustedRSquared.toFixed(3)}</p>
-                    <p className="text-sm text-gray-500">
-                      Accounts for model complexity
-                    </p>
-                  </div>
-                  <div>
                     <p className="text-lg text-gray-800">
                       F({stats.dfRegression}, {stats.dfResidual}) = {stats.fStatistic.toFixed(2)}
                     </p>
                     <p className="text-sm text-gray-500">
                       p-value: {stats.pValueF < 0.001 ? '< 0.001' : stats.pValueF.toFixed(3)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Model Diagnostics */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-medium text-gray-700">Model Diagnostics</h4>
-                  <Tooltip content={`
-                    VIF (Variance Inflation Factor):
-                    - Measures multicollinearity
-                    - VIF > 5 indicates potential multicollinearity
-                    - For simple linear regression, VIF is always 1
-                    
-                    Overfitting Risk:
-                    - Compare R² vs Adjusted R²
-                    - Large difference suggests overfitting
-                    - Current difference: ${(stats.rSquared - stats.adjustedRSquared).toFixed(4)}
-                    
-                    Standard Errors:
-                    - Slope: ${stats.standardErrorSlope.toFixed(4)}
-                    - Intercept: ${stats.standardErrorIntercept.toFixed(4)}
-                  `} />
-                </div>
-                <div className="pl-4 border-l-2 border-blue-100 space-y-2">
-                  <div>
-                    <p className="text-gray-800">VIF = {stats.vif.toFixed(2)}</p>
-                    <p className="text-sm text-gray-500">
-                      {stats.vif > 5 ? 'High multicollinearity detected' : 'No multicollinearity issues'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-800">
-                      R² - Adjusted R² = {(stats.rSquared - stats.adjustedRSquared).toFixed(3)}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {stats.rSquared - stats.adjustedRSquared > 0.1 
-                        ? 'Potential overfitting detected' 
-                        : 'No significant overfitting'}
                     </p>
                   </div>
                 </div>
@@ -190,7 +142,7 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({ stats, manualMode })
                 </div>
               </div>
 
-              {/* Formulas */}
+              {/* Formula */}
               <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -199,20 +151,8 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({ stats, manualMode })
                     </p>
                     <Tooltip content={`
                       R² can be calculated in two equivalent ways:
-                      1. As the ratio of explained variance to total variance (MSS/TSS)
-                      2. As the complement of the ratio of unexplained variance (1 - RSS/TSS)
-                      Both methods will give the same result.
-                    `} />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm text-gray-600 font-medium">
-                      TSS = MSS + RSS
-                    </p>
-                    <Tooltip content={`
-                      The total variance (TSS) is split between:
-                      - Variance explained by the model (MSS)
-                      - Unexplained variance (RSS)
-                      This relationship always holds true.
+                      1. MSS/TSS: Proportion of variance explained by the model
+                      2. 1 - (RSS/TSS): Proportion of variance not in the residuals
                     `} />
                   </div>
                 </div>
