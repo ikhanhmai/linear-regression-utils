@@ -3,22 +3,36 @@
 import React from 'react';
 import {
   ComposedChart,
-  Scatter,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Line,
+  Scatter,
   ResponsiveContainer,
-  Legend
 } from 'recharts';
-import { DataPoint } from '../types';
 import { useWindowSize } from '../hooks/useWindowSize';
+
+interface DataPoint {
+  x: number;
+  y: number;
+  yRegression?: number;
+}
+
+interface ScatterPointProps {
+  cx: number;
+  cy: number;
+  fill?: string;
+  stroke?: string;
+}
 
 interface RegressionChartProps {
   dataPoints: DataPoint[];
   regressionLine: { x: number; yRegression: number }[];
-  domain: { x: number[]; y: number[] };
+  domain: {
+    x: [number, number];
+    y: [number, number];
+  };
   generateTicks: (min: number, max: number, count?: number) => number[];
 }
 
@@ -28,55 +42,62 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
   domain,
   generateTicks,
 }) => {
-  const windowSize = useWindowSize();
-  const chartHeight = Math.min(600, Math.max(400, windowSize.height * 0.5));
+  const { height: windowHeight } = useWindowSize();
+  const chartHeight = Math.max(400, Math.min(windowHeight * 0.6, 600));
 
   return (
     <div className="w-full" style={{ height: chartHeight }}>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
-          margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+          margin={{
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 20,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             type="number"
             dataKey="x"
             name="X"
-            domain={domain.x as [number, number]}
+            domain={domain.x}
             ticks={generateTicks(domain.x[0], domain.x[1])}
           />
           <YAxis
             type="number"
             dataKey="y"
             name="Y"
-            domain={domain.y as [number, number]}
+            domain={domain.y}
             ticks={generateTicks(domain.y[0], domain.y[1])}
           />
           <Tooltip
             cursor={{ strokeDasharray: '3 3' }}
-            content={({ active, payload }) => {
-              if (active && payload && payload.length) {
-                const data = payload[0].payload;
+            content={({ payload }) => {
+              if (payload && payload.length > 0) {
+                const point = payload[0].payload;
                 return (
-                  <div className="bg-white px-4 py-2 shadow-lg rounded-lg border border-gray-200">
-                    <p className="text-sm font-medium text-gray-900">Point</p>
-                    <p className="text-sm text-gray-600">X: {data.x.toFixed(2)}</p>
-                    <p className="text-sm text-gray-600">Y: {data.y ? data.y.toFixed(2) : data.yRegression.toFixed(2)}</p>
+                  <div className="bg-white p-2 border border-gray-200 rounded shadow-sm">
+                    <p className="text-sm">
+                      <span className="font-medium">X:</span> {point.x.toFixed(2)}
+                    </p>
+                    <p className="text-sm">
+                      <span className="font-medium">Y:</span>{' '}
+                      {(point.y || point.yRegression).toFixed(2)}
+                    </p>
                   </div>
                 );
               }
               return null;
             }}
           />
-          <Legend verticalAlign="top" height={36} />
-          
+
           {/* Regression Line */}
           <Line
-            name="Regression Line"
-            data={regressionLine}
             type="monotone"
             dataKey="yRegression"
-            stroke="#10B981"
+            data={regressionLine}
+            stroke="#4F46E5"
             strokeWidth={2}
             dot={false}
             activeDot={false}
@@ -88,7 +109,7 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
             name="Data Points"
             data={dataPoints}
             fill="#818CF8"
-            shape={(props: any) => (
+            shape={(props: ScatterPointProps) => (
               <circle
                 cx={props.cx}
                 cy={props.cy}

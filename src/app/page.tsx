@@ -102,8 +102,8 @@ export default function RegressionVisualizer() {
   });
 
   // Calculate chart domain based on data points
-  const calculateChartDomain = () => {
-    if (dataPoints.length === 0) return { x: [-10, 10], y: [-10, 10] };
+  const calculateChartDomain = (): { x: [number, number]; y: [number, number] } => {
+    if (dataPoints.length === 0) return { x: [-10, 10] as [number, number], y: [-10, 10] as [number, number] };
     
     const xValues = dataPoints.map(p => p.x);
     const yValues = dataPoints.map(p => p.y);
@@ -116,8 +116,8 @@ export default function RegressionVisualizer() {
     const yPadding = Math.max(2, (yMax - yMin) * 0.2);
     
     return {
-      x: [xMin - xPadding, xMax + xPadding],
-      y: [yMin - yPadding, yMax + yPadding]
+      x: [xMin - xPadding, xMax + xPadding] as [number, number],
+      y: [yMin - yPadding, yMax + yPadding] as [number, number]
     };
   };
 

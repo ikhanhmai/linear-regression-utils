@@ -37,7 +37,6 @@ export const ExplanationSection: React.FC = () => {
 
       {isExpanded && (
         <div className="px-6 py-4 border-t border-gray-100">
-          {/* Tab Navigation */}
           <div className="flex gap-4 mb-6 border-b border-gray-100">
             <button
               onClick={() => setActiveTab('guide')}
@@ -67,7 +66,6 @@ export const ExplanationSection: React.FC = () => {
             </button>
           </div>
 
-          {/* User Guide Content */}
           {activeTab === 'guide' && (
             <div className="prose prose-sm max-w-none">
               <h3 className="text-base font-semibold mb-2">Welcome to the Linear Regression Visualizer!</h3>
@@ -90,7 +88,7 @@ export const ExplanationSection: React.FC = () => {
                   <strong>Manual Mode:</strong> Toggle this to adjust the regression line manually and see how it affects the fit
                 </li>
                 <li>
-                  <strong>Statistics Display:</strong> View important regression statistics like R², TSS, MSS, and RSS
+                  <strong>Statistics Display:</strong> View important regression statistics like R&amp;sup2;, TSS, MSS, and RSS
                 </li>
               </ul>
 
@@ -99,7 +97,7 @@ export const ExplanationSection: React.FC = () => {
                 <li>
                   Start by either:
                   <ul className="list-disc pl-5 mt-1">
-                    <li>Entering X and Y values manually and clicking "Add Point"</li>
+                    <li>Entering X and Y values manually and clicking &quot;Add Point&quot;</li>
                     <li>Using the random point generator to create a dataset</li>
                   </ul>
                 </li>
@@ -107,7 +105,7 @@ export const ExplanationSection: React.FC = () => {
                   Observe the regression line that best fits your data points
                 </li>
                 <li>
-                  Toggle "Manual Mode" to:
+                  Toggle &quot;Manual Mode&quot; to:
                   <ul className="list-disc pl-5 mt-1">
                     <li>Adjust the slope and intercept using sliders</li>
                     <li>See how changes affect the fit statistics</li>
@@ -117,7 +115,7 @@ export const ExplanationSection: React.FC = () => {
                 <li>
                   Study the statistics:
                   <ul className="list-disc pl-5 mt-1">
-                    <li>R² shows how well the line fits the data (0 to 1)</li>
+                    <li>R&amp;sup2; shows how well the line fits the data (0 to 1)</li>
                     <li>TSS represents total variance in the data</li>
                     <li>MSS shows variance explained by the model</li>
                     <li>RSS indicates remaining unexplained variance</li>
@@ -143,7 +141,6 @@ export const ExplanationSection: React.FC = () => {
             </div>
           )}
 
-          {/* Technical Details Content */}
           {activeTab === 'technical' && (
             <div className="prose prose-sm max-w-none">
               <h3 className="text-base font-semibold mb-2">How the Model Works</h3>
@@ -154,17 +151,17 @@ export const ExplanationSection: React.FC = () => {
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-4">
                 <li>
-                  <strong>Model Equation:</strong> y = βₒ + β₁x
+                  <strong>Model Equation:</strong> y = β&amp;sub0; + β&amp;sub1;x
                   <ul className="list-disc pl-5 mt-1">
-                    <li>βₒ (beta-zero) is the y-intercept</li>
-                    <li>β₁ (beta-one) is the slope</li>
+                    <li>β&amp;sub0; (beta-zero) is the y-intercept</li>
+                    <li>β&amp;sub1; (beta-one) is the slope</li>
                   </ul>
                 </li>
                 <li>
                   <strong>Parameter Calculation:</strong>
                   <ul className="list-disc pl-5 mt-1">
-                    <li>β₁ = (n∑xy - ∑x∑y) / (n∑x² - (∑x)²)</li>
-                    <li>βₒ = ȳ - β₁x̄</li>
+                    <li>β&amp;sub1; = (n∑xy - ∑x∑y) / (n∑x&amp;sup2; - (∑x)&amp;sup2;)</li>
+                    <li>β&amp;sub0; = ȳ - β&amp;sub1;x̄</li>
                     <li>Where x̄ and ȳ are the means of x and y values</li>
                   </ul>
                 </li>
@@ -172,15 +169,15 @@ export const ExplanationSection: React.FC = () => {
 
               <h4 className="font-medium mb-2">Random Point Generation</h4>
               <p className="mb-4">
-                When you click the "Generate Random Points" button, the following process happens under the hood:
+                When you click the &quot;Generate Random Points&quot; button, the following process happens under the hood:
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-4">
                 <li>
-                  <strong>Step 1: Create a "True" Line</strong>
+                  <strong>Step 1: Create a &quot;True&quot; Line</strong>
                   <ul className="list-disc pl-5 mt-1">
                     <li>Generates a random slope between -1 and 1</li>
                     <li>Generates a random intercept between -5 and 5</li>
-                    <li>This hidden "true" line represents the underlying pattern that points will follow</li>
+                    <li>This hidden &quot;true&quot; line represents the underlying pattern that points will follow</li>
                   </ul>
                 </li>
                 <li>
@@ -199,50 +196,8 @@ export const ExplanationSection: React.FC = () => {
                   <strong>Step 3: Update and Recalculate</strong>
                   <ul className="list-disc pl-5 mt-1">
                     <li>Replace existing points with the new random points</li>
-                    <li>Automatically trigger regression recalculation</li>
-                    <li>Update all statistics (R², TSS, MSS, RSS)</li>
-                    <li>Redraw the chart with new points and regression line</li>
-                  </ul>
-                </li>
-              </ul>
-              <p className="mb-4 text-sm text-gray-600 italic">
-                Interesting note: The regression line that the algorithm finds might be slightly different from the "true" line used to generate the points. 
-                This simulates real-world scenarios where we try to discover underlying relationships from noisy data!
-              </p>
-
-              <h4 className="font-medium mb-2">Statistics Calculation</h4>
-              <p className="mb-4">
-                The model calculates several key statistics to measure the fit quality:
-              </p>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>
-                  <strong>Total Sum of Squares (TSS):</strong>
-                  <ul className="list-disc pl-5 mt-1">
-                    <li>Measures total variance in y values</li>
-                    <li>TSS = ∑(y - ȳ)²</li>
-                  </ul>
-                </li>
-                <li>
-                  <strong>Model Sum of Squares (MSS):</strong>
-                  <ul className="list-disc pl-5 mt-1">
-                    <li>Measures variance explained by the model</li>
-                    <li>MSS = ∑(ŷ - ȳ)²</li>
-                    <li>Where ŷ is the predicted y value</li>
-                  </ul>
-                </li>
-                <li>
-                  <strong>Residual Sum of Squares (RSS):</strong>
-                  <ul className="list-disc pl-5 mt-1">
-                    <li>Measures unexplained variance</li>
-                    <li>RSS = ∑(y - ŷ)²</li>
-                  </ul>
-                </li>
-                <li>
-                  <strong>R-squared (R²):</strong>
-                  <ul className="list-disc pl-5 mt-1">
-                    <li>Measures proportion of variance explained</li>
-                    <li>R² = 1 - (RSS/TSS)</li>
-                    <li>Or equivalently: R² = MSS/TSS</li>
+                    <li>Calculate new regression line parameters</li>
+                    <li>Update all statistics (R&amp;sup2;, TSS, MSS, RSS)</li>
                   </ul>
                 </li>
               </ul>
