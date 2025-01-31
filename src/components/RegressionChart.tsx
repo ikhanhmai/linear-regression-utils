@@ -66,6 +66,7 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
           fill="#8884d8"
           name="Data Points"
           dataKey="y"
+          //eslint-disable-next-line @typescript-eslint/no-explicit-any
           shape={(props: any) => {
             const { cx, cy } = props;
             return (

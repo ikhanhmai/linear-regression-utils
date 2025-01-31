@@ -9,6 +9,9 @@ export interface RegressionStats {
   rSquared: number;
   calculatedSlope: number;
   calculatedIntercept: number;
+  tss: number;  // Total Sum of Squares
+  mss: number;  // Model Sum of Squares
+  rss: number;  // Residual Sum of Squares
 }
 
 export interface ChartDomain {

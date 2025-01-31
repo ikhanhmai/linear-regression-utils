@@ -25,7 +25,10 @@ const RegressionVisualizer: React.FC = () => {
     intercept: 0,
     rSquared: 0,
     calculatedSlope: 0,
-    calculatedIntercept: 0
+    calculatedIntercept: 0,
+    tss: 0,
+    mss: 0,
+    rss: 0
   });
   const [feedback, setFeedback] = useState<string>('');
 
@@ -54,7 +57,14 @@ const RegressionVisualizer: React.FC = () => {
   };
 
   // Calculate regression statistics
-  const calculateRegression = (points: DataPoint[]): { slope: number; intercept: number; rSquared: number } => {
+  const calculateRegression = (points: DataPoint[]): { 
+    slope: number; 
+    intercept: number; 
+    rSquared: number;
+    tss: number;
+    mss: number;
+    rss: number;
+  } => {
     const n = points.length;
     const sumX = points.reduce((sum, p) => sum + p.x, 0);
     const sumY = points.reduce((sum, p) => sum + p.y, 0);
@@ -67,11 +77,20 @@ const RegressionVisualizer: React.FC = () => {
     const intercept = meanY - slope * meanX;
 
     const predictions = points.map(p => slope * p.x + intercept);
-    const ssRes = points.reduce((sum, p, i) => sum + Math.pow(p.y - predictions[i], 2), 0);
-    const ssTot = points.reduce((sum, p) => sum + Math.pow(p.y - meanY, 2), 0);
-    const rSquared = 1 - (ssRes / ssTot);
+    
+    // Calculate TSS (Total Sum of Squares)
+    const tss = points.reduce((sum, p) => sum + Math.pow(p.y - meanY, 2), 0);
+    
+    // Calculate RSS (Residual Sum of Squares)
+    const rss = points.reduce((sum, p, i) => sum + Math.pow(p.y - predictions[i], 2), 0);
+    
+    // Calculate MSS (Model Sum of Squares)
+    const mss = tss - rss;
+    
+    // Calculate R-squared
+    const rSquared = 1 - (rss / tss);
 
-    return { slope, intercept, rSquared };
+    return { slope, intercept, rSquared, tss, mss, rss };
   };
 
   // Update regression and chart domain when data points change
@@ -86,13 +105,19 @@ const RegressionVisualizer: React.FC = () => {
         intercept: stats.intercept,
         rSquared: stats.rSquared,
         calculatedSlope: stats.slope,
-        calculatedIntercept: stats.intercept
+        calculatedIntercept: stats.intercept,
+        tss: stats.tss,
+        mss: stats.mss,
+        rss: stats.rss
       });
     } else {
       setRegressionStats(prev => ({
         ...prev,
         calculatedSlope: stats.slope,
-        calculatedIntercept: stats.intercept
+        calculatedIntercept: stats.intercept,
+        tss: stats.tss,
+        mss: stats.mss,
+        rss: stats.rss
       }));
     }
   }, [dataPoints, manualMode]);
