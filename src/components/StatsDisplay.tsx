@@ -30,18 +30,25 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({ stats, manualMode })
                 <div className="flex items-center gap-2">
                   <h4 className="text-sm font-medium text-gray-700">Line Parameters</h4>
                   <Tooltip content={`
-                    Slope (β₁) = (n∑xy - ∑x∑y) / (n∑x² - (∑x)²)
-                    Intercept (β₀) = ȳ - β₁x̄
-                    where:
-                    - n is the number of points
-                    - x̄ is the mean of x values
-                    - ȳ is the mean of y values
+                    Slope (β₁) = ${stats.slope.toFixed(4)}
+                    Standard Error = ${stats.standardErrorSlope.toFixed(4)}
+                    t-statistic = ${stats.tStatisticSlope.toFixed(4)}
+                    p-value = ${stats.pValueSlope.toFixed(4)}
+
+                    Intercept (β₀) = ${stats.intercept.toFixed(4)}
+                    Standard Error = ${stats.standardErrorIntercept.toFixed(4)}
+                    t-statistic = ${stats.tStatisticIntercept.toFixed(4)}
+                    p-value = ${stats.pValueIntercept.toFixed(4)}
                   `} />
                 </div>
-                <div className="pl-4 border-l-2 border-blue-100">
+                <div className="pl-4 border-l-2 border-blue-100 space-y-2">
                   <p className="font-mono text-lg text-gray-800">
                     y = {stats.slope.toFixed(2)}x + {stats.intercept.toFixed(2)}
                   </p>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p>Slope p-value: {stats.pValueSlope < 0.001 ? '< 0.001' : stats.pValueSlope.toFixed(3)}</p>
+                    <p>Intercept p-value: {stats.pValueIntercept < 0.001 ? '< 0.001' : stats.pValueIntercept.toFixed(3)}</p>
+                  </div>
                 </div>
               </div>
 
@@ -51,16 +58,81 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({ stats, manualMode })
                   <h4 className="text-sm font-medium text-gray-700">Model Fit</h4>
                   <Tooltip content={`
                     R² measures how well the regression line approximates the data points.
-                    - R² = 1: Perfect fit
-                    - R² = 0: Line explains none of the variability
-                    - Higher R² indicates better model fit
+                    Adjusted R² accounts for model complexity.
+                    F-statistic tests if the model is significantly better than a horizontal line.
+                    
+                    R² = ${stats.rSquared.toFixed(4)}
+                    Adjusted R² = ${stats.adjustedRSquared.toFixed(4)}
+                    F-statistic = ${stats.fStatistic.toFixed(4)}
+                    F p-value = ${stats.pValueF.toFixed(4)}
+                    
+                    Degrees of Freedom:
+                    - Regression: ${stats.dfRegression}
+                    - Residual: ${stats.dfResidual}
+                    - Total: ${stats.dfTotal}
                   `} />
                 </div>
-                <div className="pl-4 border-l-2 border-blue-100">
-                  <p className="text-lg text-gray-800">R² = {stats.rSquared.toFixed(3)}</p>
-                  <p className="text-sm text-gray-500">
-                    Explains {(stats.rSquared * 100).toFixed(1)}% of variance
-                  </p>
+                <div className="pl-4 border-l-2 border-blue-100 space-y-2">
+                  <div>
+                    <p className="text-lg text-gray-800">R² = {stats.rSquared.toFixed(3)}</p>
+                    <p className="text-sm text-gray-500">
+                      Explains {(stats.rSquared * 100).toFixed(1)}% of variance
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-lg text-gray-800">Adjusted R² = {stats.adjustedRSquared.toFixed(3)}</p>
+                    <p className="text-sm text-gray-500">
+                      Accounts for model complexity
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-lg text-gray-800">
+                      F({stats.dfRegression}, {stats.dfResidual}) = {stats.fStatistic.toFixed(2)}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      p-value: {stats.pValueF < 0.001 ? '< 0.001' : stats.pValueF.toFixed(3)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Model Diagnostics */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-sm font-medium text-gray-700">Model Diagnostics</h4>
+                  <Tooltip content={`
+                    VIF (Variance Inflation Factor):
+                    - Measures multicollinearity
+                    - VIF > 5 indicates potential multicollinearity
+                    - For simple linear regression, VIF is always 1
+                    
+                    Overfitting Risk:
+                    - Compare R² vs Adjusted R²
+                    - Large difference suggests overfitting
+                    - Current difference: ${(stats.rSquared - stats.adjustedRSquared).toFixed(4)}
+                    
+                    Standard Errors:
+                    - Slope: ${stats.standardErrorSlope.toFixed(4)}
+                    - Intercept: ${stats.standardErrorIntercept.toFixed(4)}
+                  `} />
+                </div>
+                <div className="pl-4 border-l-2 border-blue-100 space-y-2">
+                  <div>
+                    <p className="text-gray-800">VIF = {stats.vif.toFixed(2)}</p>
+                    <p className="text-sm text-gray-500">
+                      {stats.vif > 5 ? 'High multicollinearity detected' : 'No multicollinearity issues'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-800">
+                      R² - Adjusted R² = {(stats.rSquared - stats.adjustedRSquared).toFixed(3)}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {stats.rSquared - stats.adjustedRSquared > 0.1 
+                        ? 'Potential overfitting detected' 
+                        : 'No significant overfitting'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

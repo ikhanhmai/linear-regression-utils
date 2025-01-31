@@ -25,3 +25,4 @@ export const SOCIAL_LINKS = [
 
 export const CONTACT_EMAIL = 'blueblazedev@outlook.com';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/ikhanhmai/';
+export const AUTHOR_NAME = 'Khanh Mai';

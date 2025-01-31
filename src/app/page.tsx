@@ -20,6 +20,19 @@ const initialPoints: DataPoint[] = [
 // Calculate mean of an array
 const mean = (arr: number[]): number => arr.reduce((a, b) => a + b, 0) / arr.length;
 
+// Calculate variance of an array
+const variance = (arr: number[]): number => {
+  const m = mean(arr);
+  return arr.reduce((a, b) => a + Math.pow(b - m, 2), 0) / (arr.length - 1);
+};
+
+// Calculate p-value from t-statistic (using normal distribution as approximation)
+const calculatePValue = (tStatistic: number): number => {
+  // This is a simplified approximation using the standard normal distribution
+  const absT = Math.abs(tStatistic);
+  return 2 * (1 - Math.exp(-0.717 * absT - 0.416 * absT * absT));
+};
+
 // Calculate regression statistics
 const calculateRegression = (points: DataPoint[]): RegressionStats => {
   if (points.length < 2) {
@@ -31,7 +44,20 @@ const calculateRegression = (points: DataPoint[]): RegressionStats => {
       calculatedIntercept: 0,
       tss: 0,
       mss: 0,
-      rss: 0
+      rss: 0,
+      tStatisticSlope: 0,
+      tStatisticIntercept: 0,
+      pValueSlope: 1,
+      pValueIntercept: 1,
+      fStatistic: 0,
+      pValueF: 1,
+      standardErrorSlope: 0,
+      standardErrorIntercept: 0,
+      vif: 1,
+      adjustedRSquared: 0,
+      dfRegression: 0,
+      dfResidual: 0,
+      dfTotal: 0
     };
   }
 
@@ -47,19 +73,46 @@ const calculateRegression = (points: DataPoint[]): RegressionStats => {
   const xSum = xValues.reduce((a, b) => a + b, 0);
   const ySum = yValues.reduce((a, b) => a + b, 0);
   
+  // Calculate basic regression parameters
   const slope = (n * xySum - xSum * ySum) / (n * xxSum - xSum * xSum);
   const intercept = yMean - slope * xMean;
   
-  // Calculate predictions
+  // Calculate predictions and residuals
   const predictions = points.map(p => slope * p.x + intercept);
+  const residuals = points.map((p, i) => p.y - predictions[i]);
   
-  // Calculate TSS, MSS, and RSS
+  // Calculate sums of squares
   const tss = points.reduce((sum, p) => sum + Math.pow(p.y - yMean, 2), 0);
-  const rss = points.reduce((sum, p, i) => sum + Math.pow(p.y - predictions[i], 2), 0);
+  const rss = residuals.reduce((sum, r) => sum + r * r, 0);
   const mss = tss - rss;
   
-  // Calculate R-squared
+  // Calculate R-squared and Adjusted R-squared
   const rSquared = 1 - (rss / tss);
+  const dfTotal = n - 1;
+  const dfRegression = 1;  // Simple linear regression has 1 predictor
+  const dfResidual = n - 2;  // n - (predictors + 1)
+  const adjustedRSquared = 1 - ((1 - rSquared) * (n - 1) / (n - 2));
+  
+  // Calculate standard errors
+  const mse = rss / dfResidual;  // Mean squared error
+  const xVariance = variance(xValues);
+  const standardErrorSlope = Math.sqrt(mse / (n * xVariance));
+  const standardErrorIntercept = Math.sqrt(mse * (1/n + Math.pow(xMean, 2)/(n * xVariance)));
+  
+  // Calculate t-statistics
+  const tStatisticSlope = slope / standardErrorSlope;
+  const tStatisticIntercept = intercept / standardErrorIntercept;
+  
+  // Calculate p-values
+  const pValueSlope = calculatePValue(tStatisticSlope);
+  const pValueIntercept = calculatePValue(tStatisticIntercept);
+  
+  // Calculate F-statistic and its p-value
+  const fStatistic = (mss / dfRegression) / (rss / dfResidual);
+  const pValueF = calculatePValue(Math.sqrt(fStatistic));
+  
+  // Calculate VIF (for simple linear regression, it's always 1)
+  const vif = 1;
   
   return {
     slope,
@@ -69,7 +122,20 @@ const calculateRegression = (points: DataPoint[]): RegressionStats => {
     calculatedIntercept: intercept,
     tss,
     mss,
-    rss
+    rss,
+    tStatisticSlope,
+    tStatisticIntercept,
+    pValueSlope,
+    pValueIntercept,
+    fStatistic,
+    pValueF,
+    standardErrorSlope,
+    standardErrorIntercept,
+    vif,
+    adjustedRSquared,
+    dfRegression,
+    dfResidual,
+    dfTotal
   };
 };
 
@@ -99,7 +165,20 @@ export default function RegressionVisualizer() {
     calculatedIntercept: 0,
     tss: 0,
     mss: 0,
-    rss: 0
+    rss: 0,
+    tStatisticSlope: 0,
+    tStatisticIntercept: 0,
+    pValueSlope: 1,
+    pValueIntercept: 1,
+    fStatistic: 0,
+    pValueF: 1,
+    standardErrorSlope: 0,
+    standardErrorIntercept: 0,
+    vif: 1,
+    adjustedRSquared: 0,
+    dfRegression: 0,
+    dfResidual: 0,
+    dfTotal: 0
   });
 
   // Calculate chart domain based on data points
@@ -157,7 +236,20 @@ export default function RegressionVisualizer() {
         rSquared: stats.rSquared,
         tss: stats.tss,
         mss: stats.mss,
-        rss: stats.rss
+        rss: stats.rss,
+        tStatisticSlope: stats.tStatisticSlope,
+        tStatisticIntercept: stats.tStatisticIntercept,
+        pValueSlope: stats.pValueSlope,
+        pValueIntercept: stats.pValueIntercept,
+        fStatistic: stats.fStatistic,
+        pValueF: stats.pValueF,
+        standardErrorSlope: stats.standardErrorSlope,
+        standardErrorIntercept: stats.standardErrorIntercept,
+        vif: stats.vif,
+        adjustedRSquared: stats.adjustedRSquared,
+        dfRegression: stats.dfRegression,
+        dfResidual: stats.dfResidual,
+        dfTotal: stats.dfTotal
       }));
     }
   }, [dataPoints, manualMode]);
