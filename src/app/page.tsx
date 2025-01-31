@@ -6,6 +6,7 @@ import { RegressionChart } from '../components/RegressionChart';
 import { StatsDisplay } from '../components/StatsDisplay';
 import { ManualControls } from '../components/ManualControls';
 import { ExplanationSection } from '../components/ExplanationSection';
+import Footer from '../components/Footer';
 import { DataPoint, RegressionStats } from '../types';
 
 const initialPoints: DataPoint[] = [
@@ -196,7 +197,7 @@ export default function RegressionVisualizer() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 py-8 max-w-7xl min-h-screen flex flex-col">
       <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">Linear Regression Visualizer</h1>
       
       {/* Main Content */}
@@ -244,6 +245,7 @@ export default function RegressionVisualizer() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

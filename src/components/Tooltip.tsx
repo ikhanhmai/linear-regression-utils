@@ -7,7 +7,6 @@ import {
   useInteractions,
   useHover,
   useRole,
-  useClick,
   offset,
   flip,
   shift,
@@ -39,12 +38,10 @@ export const Tooltip: React.FC<TooltipProps> = ({ content }) => {
   const hover = useHover(context, {
     move: false,
   });
-  const click = useClick(context);
   const role = useRole(context);
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
-    click,
     role,
   ]);
 
