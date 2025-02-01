@@ -11,21 +11,9 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { DataPoint } from '../types';
 
-interface DataPoint {
-  x: number;
-  y: number;
-  yRegression?: number;
-}
-
-interface ScatterPointProps {
-  cx: number;
-  cy: number;
-  fill?: string;
-  stroke?: string;
-}
-
-interface RegressionChartProps {
+interface SimpleRegressionChartProps {
   dataPoints: DataPoint[];
   regressionLine: { x: number; yRegression: number }[];
   domain: {
@@ -35,7 +23,7 @@ interface RegressionChartProps {
   generateTicks: (min: number, max: number, count?: number) => number[];
 }
 
-export const RegressionChart: React.FC<RegressionChartProps> = ({
+export const SimpleRegressionChart: React.FC<SimpleRegressionChartProps> = ({
   dataPoints,
   regressionLine,
   domain,
@@ -92,6 +80,15 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
             }}
           />
 
+          {/* Data Points */}
+          <Scatter
+            name="Points"
+            data={dataPoints}
+            fill="#4F46E5"
+            fillOpacity={0.6}
+            shape="circle"
+          />
+
           {/* Regression Line */}
           <Line
             type="monotone"
@@ -101,24 +98,6 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
             strokeWidth={2}
             dot={false}
             activeDot={false}
-            isAnimationActive={false}
-          />
-          
-          {/* Data Points */}
-          <Scatter
-            name="Data Points"
-            data={dataPoints}
-            fill="#818CF8"
-            shape={(props: ScatterPointProps) => (
-              <circle
-                cx={props.cx}
-                cy={props.cy}
-                r={4}
-                fill="#818CF8"
-                stroke="#fff"
-                strokeWidth={1}
-              />
-            )}
           />
         </ComposedChart>
       </ResponsiveContainer>

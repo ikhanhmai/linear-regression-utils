@@ -11,35 +11,25 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { MultipleDataPoint } from '../types';
 
-interface DataPoint {
-  x: number;
-  y: number;
-  yRegression?: number;
-}
-
-interface ScatterPointProps {
-  cx: number;
-  cy: number;
-  fill?: string;
-  stroke?: string;
-}
-
-interface RegressionChartProps {
-  dataPoints: DataPoint[];
+interface MultipleRegressionChartProps {
+  dataPoints: { x: number; y: number }[];
   regressionLine: { x: number; yRegression: number }[];
   domain: {
     x: [number, number];
     y: [number, number];
   };
   generateTicks: (min: number, max: number, count?: number) => number[];
+  selectedFeature: number;
 }
 
-export const RegressionChart: React.FC<RegressionChartProps> = ({
+export const MultipleRegressionChart: React.FC<MultipleRegressionChartProps> = ({
   dataPoints,
   regressionLine,
   domain,
   generateTicks,
+  selectedFeature,
 }) => {
   const chartHeight = 400;
 
@@ -58,7 +48,7 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
           <XAxis
             type="number"
             dataKey="x"
-            name="X"
+            name={`Feature ${selectedFeature + 1}`}
             domain={domain.x}
             ticks={generateTicks(domain.x[0], domain.x[1])}
             tickFormatter={(value) => value.toFixed(2)}
@@ -79,7 +69,8 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
                 return (
                   <div className="bg-white p-2 border border-gray-200 rounded shadow-sm">
                     <p className="text-sm">
-                      <span className="font-medium">X:</span> {point.x.toFixed(2)}
+                      <span className="font-medium">Feature {selectedFeature + 1}:</span>{' '}
+                      {point.x.toFixed(2)}
                     </p>
                     <p className="text-sm">
                       <span className="font-medium">Y:</span>{' '}
@@ -92,6 +83,15 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
             }}
           />
 
+          {/* Data Points */}
+          <Scatter
+            name="Points"
+            data={dataPoints}
+            fill="#4F46E5"
+            fillOpacity={0.6}
+            shape="circle"
+          />
+
           {/* Regression Line */}
           <Line
             type="monotone"
@@ -101,24 +101,6 @@ export const RegressionChart: React.FC<RegressionChartProps> = ({
             strokeWidth={2}
             dot={false}
             activeDot={false}
-            isAnimationActive={false}
-          />
-          
-          {/* Data Points */}
-          <Scatter
-            name="Data Points"
-            data={dataPoints}
-            fill="#818CF8"
-            shape={(props: ScatterPointProps) => (
-              <circle
-                cx={props.cx}
-                cy={props.cy}
-                r={4}
-                fill="#818CF8"
-                stroke="#fff"
-                strokeWidth={1}
-              />
-            )}
           />
         </ComposedChart>
       </ResponsiveContainer>

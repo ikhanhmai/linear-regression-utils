@@ -7,13 +7,18 @@ interface WindowSize {
   height: number;
 }
 
+// Default size to ensure consistent server/client initial render
+const defaultSize: WindowSize = {
+  width: 1024,
+  height: 768
+};
+
 export function useWindowSize(): WindowSize {
-  const [windowSize, setWindowSize] = useState<WindowSize>({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0,
-  });
+  const [windowSize, setWindowSize] = useState<WindowSize>(defaultSize);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
     function handleResize() {
       setWindowSize({
         width: window.innerWidth,
@@ -21,12 +26,11 @@ export function useWindowSize(): WindowSize {
       });
     }
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
-      handleResize();
-      return () => window.removeEventListener('resize', handleResize);
-    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  return windowSize;
+  // Return default size during SSR, actual size after mount
+  return hasMounted ? windowSize : defaultSize;
 }
