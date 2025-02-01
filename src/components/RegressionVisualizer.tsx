@@ -240,17 +240,13 @@ export const RegressionVisualizer: React.FC<RegressionVisualizerProps> = ({ type
       if (multiplePoints.length === 0) return { x: [-10, 10] as [number, number], y: [-10, 10] as [number, number] };
       
       const x1Values = multiplePoints.map(p => p.x[0]);
-      const x2Values = multiplePoints.map(p => p.x[1]);
       const yValues = multiplePoints.map(p => p.y);
       const x1Min = Math.min(...x1Values);
       const x1Max = Math.max(...x1Values);
-      const x2Min = Math.min(...x2Values);
-      const x2Max = Math.max(...x2Values);
       const yMin = Math.min(...yValues);
       const yMax = Math.max(...yValues);
       
       const x1Padding = Math.max(2, (x1Max - x1Min) * 0.2);
-      const x2Padding = Math.max(2, (x2Max - x2Min) * 0.2);
       const yPadding = Math.max(2, (yMax - yMin) * 0.2);
       
       return {
@@ -315,7 +311,7 @@ export const RegressionVisualizer: React.FC<RegressionVisualizerProps> = ({ type
     } else {
       // TO DO: implement multiple linear regression
     }
-  }, [simplePoints, multiplePoints, manualMode]);
+  }, [simplePoints, multiplePoints, manualMode, type]); // Add type to dependencies
 
   // Handle adding new points
   const handleAddSimplePoint = (point: DataPoint) => {

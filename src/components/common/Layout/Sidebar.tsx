@@ -1,18 +1,22 @@
-"use client";
+import React from 'react';
+import { FaChartBar, FaBook } from 'react-icons/fa';
+import type { IconType } from 'react-icons';
+import Footer from '../../../components/Footer';
 
-import React, { useState } from 'react';
-import { IconType } from 'react-icons';
-import { 
-  FaChartBar, 
-  FaBook, 
-  FaChevronDown,
-  FaChevronRight,
-  FaGithub, 
-  FaTwitter, 
-  FaLinkedin, 
-  FaEnvelope 
-} from 'react-icons/fa';
-import { SOCIAL_LINKS, CONTACT_EMAIL, AUTHOR_NAME } from '../../../constants/social';
+interface MenuItem {
+  id: string;
+  label: string;
+  icon?: IconType;
+  children?: MenuItem[];
+}
+
+interface MenuItemProps {
+  item: MenuItem;
+  activeItem: string;
+  onSelectItem: (id: string) => void;
+  onSectionChange?: (section: 'why-regression' | 'user-guide' | 'technical-details' | 'glossary') => void;
+  level?: number;
+}
 
 interface SidebarProps {
   activeItem: string;
@@ -20,33 +24,24 @@ interface SidebarProps {
   onSectionChange: (section: 'why-regression' | 'user-guide' | 'technical-details' | 'glossary') => void;
 }
 
-export interface MenuItem {
-  id: string;
-  label: string;
-  icon?: IconType;
-  children?: MenuItem[];
-}
-
 const menuItems: MenuItem[] = [
   {
-    id: 'regression',
+    id: 'regression-analysis',
     label: 'Regression Analysis',
     icon: FaChartBar,
     children: [
       {
         id: 'simple-regression',
-        label: 'Simple Linear Regression',
-        icon: FaChartBar
+        label: 'Simple Linear Regression'
       },
       {
         id: 'multiple-regression',
-        label: 'Multiple Linear Regression',
-        icon: FaChartBar
+        label: 'Multiple Linear Regression'
       }
     ]
   },
   {
-    id: 'explanation',
+    id: 'learning-resources',
     label: 'Learning Resources',
     icon: FaBook,
     children: [
@@ -70,65 +65,36 @@ const menuItems: MenuItem[] = [
   }
 ];
 
-const MenuItem: React.FC<{
-  item: MenuItem;
-  activeItem: string;
-  onSelectItem: (id: string) => void;
-  onSectionChange?: (section: 'why-regression' | 'user-guide' | 'technical-details' | 'glossary') => void;
-  level?: number;
-}> = ({ item, activeItem, onSelectItem, onSectionChange, level = 0 }) => {
-  const [isExpanded, setIsExpanded] = React.useState(
-    item.children?.some(child => child.id === activeItem) || item.id === activeItem
-  );
-
+const MenuItem: React.FC<MenuItemProps> = ({ 
+  item, 
+  activeItem, 
+  onSelectItem, 
+  onSectionChange,
+  level = 0 
+}) => {
   const handleClick = () => {
-    if (item.children) {
-      setIsExpanded(!isExpanded);
-    } else {
-      onSelectItem(item.id);
-      
-      // Handle learning resource section changes
-      if (item.id === 'why-regression' || 
-          item.id === 'user-guide' || 
-          item.id === 'technical-details' || 
-          item.id === 'glossary') {
-        onSectionChange?.(item.id as any);
-      }
+    onSelectItem(item.id);
+    if (onSectionChange && item.id.match(/^(why-regression|user-guide|technical-details|glossary)$/)) {
+      onSectionChange(item.id as 'why-regression' | 'user-guide' | 'technical-details' | 'glossary');
     }
   };
 
-  const isActive = activeItem === item.id;
-  const Icon = item.icon;
-
   return (
-    <div className="w-full">
+    <div className="space-y-1">
       <button
         onClick={handleClick}
-        className={`w-full flex items-center px-4 py-2 text-sm transition-colors rounded-lg
-          ${isActive 
-            ? 'bg-blue-50 text-blue-600' 
-            : 'text-gray-600 hover:bg-gray-50'
-          }
+        className={`
+          w-full text-left px-2 py-2 rounded-md
+          ${level > 0 ? 'pl-10' : 'font-medium'}
+          ${activeItem === item.id ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}
+          flex items-center space-x-2
         `}
-        style={{ paddingLeft: `${level * 1 + 1}rem` }}
       >
-        <div className="flex items-center flex-1">
-          {Icon && <Icon className="w-4 h-4 mr-3" />}
-          <span className="flex-1 text-left">{item.label}</span>
-        </div>
-        {item.children && (
-          <span className="ml-auto">
-            {isExpanded ? (
-              <FaChevronDown className="w-3 h-3" />
-            ) : (
-              <FaChevronRight className="w-3 h-3" />
-            )}
-          </span>
-        )}
+        {item.icon && <item.icon className="w-5 h-5" />}
+        <span>{item.label}</span>
       </button>
-
-      {item.children && isExpanded && (
-        <div className="mt-1">
+      {item.children && (
+        <div className="space-y-1">
           {item.children.map((child) => (
             <MenuItem
               key={child.id}
@@ -145,39 +111,10 @@ const MenuItem: React.FC<{
   );
 };
 
-const Footer = () => {
-  return (
-    <div className="p-4 border-t bg-white">
-      <div className="flex justify-center space-x-4 mb-3">
-        {SOCIAL_LINKS.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-400 hover:text-gray-500"
-          >
-            <span className="sr-only">{item.label}</span>
-            <item.icon className="h-5 w-5" aria-hidden="true" />
-          </a>
-        ))}
-      </div>
-      <div className="text-center">
-        <p className="text-xs leading-5 text-gray-500">
-          &copy; {new Date().getFullYear()} Linear Regression Utils by {AUTHOR_NAME}
-        </p>
-        <p className="text-xs leading-5 text-gray-500 mt-1">
-          Have feedback? <a href={`mailto:${CONTACT_EMAIL}`} className="text-gray-600 hover:text-gray-900">Email me</a>
-        </p>
-      </div>
-    </div>
-  );
-};
-
 export const Sidebar: React.FC<SidebarProps> = ({ activeItem, onSelectItem, onSectionChange }) => {
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 overflow-y-auto">
         <h1 className="text-xl font-semibold text-gray-900 mb-6">
           Linear Regression
         </h1>

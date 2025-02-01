@@ -8,19 +8,19 @@ import { ExplanationSection } from './ExplanationSection';
 const getContent = (activeItem: string) => {
   switch (activeItem) {
     case 'simple-regression':
-      return <RegressionVisualizer />;
+      return <RegressionVisualizer type={'simple'} />;
     case 'multiple-regression':
       return <div className="p-6">Multiple Linear Regression - Coming Soon!</div>;
     case 'why-linear-regression':
-      return <ExplanationSection defaultTab="why" />;
+      return <ExplanationSection activeSection="why-regression" />;
     case 'user-guide':
-      return <ExplanationSection defaultTab="guide" />;
+      return <ExplanationSection activeSection="user-guide" />;
     case 'technical-details':
-      return <ExplanationSection defaultTab="technical" />;
+      return <ExplanationSection activeSection="technical-details" />;
     case 'glossary':
-      return <ExplanationSection defaultTab="glossary" />;
+      return <ExplanationSection activeSection="glossary" />;
     default:
-      return <RegressionVisualizer />;
+      return <RegressionVisualizer type={'simple'} />;
   }
 };
 
