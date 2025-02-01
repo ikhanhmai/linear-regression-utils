@@ -1,39 +1,31 @@
 "use client";
 
-import React, { useState, Dispatch, SetStateAction } from 'react';
-import { MultipleDataPoint, NewPoint } from '../types';
+import React, { useState } from 'react';
+import { MultipleNewPoint } from '../types';
 import { Tooltip } from './Tooltip';
 
 interface MultipleDataInputFormProps {
-  newPoint: NewPoint;
-  onAddPoint: () => void;
-  onInputChange: (field: string, value: string) => void;
-  selectedFeature: number;
-  onFeatureChange: Dispatch<SetStateAction<number>>;
-  onGeneratePoints: (count: number) => void;
-  featureCount: number;
+  onPointAdd: (point: MultipleNewPoint) => void;
+  onGeneratePoints?: (count: number) => void;
 }
 
-export const MultipleDataInputForm: React.FC<MultipleDataInputFormProps> = ({
-  onAddPoint,
-  onInputChange,
-  selectedFeature,
-  onFeatureChange,
-  onGeneratePoints,
-  featureCount,
-}) => {
-  const [featureValues, setFeatureValues] = useState<string[]>(Array(featureCount).fill(''));
+export const MultipleDataInputForm: React.FC<MultipleDataInputFormProps> = ({ onPointAdd, onGeneratePoints }) => {
+  const [featureValues, setFeatureValues] = useState<string[]>(Array(2).fill(''));
   const [yValue, setYValue] = useState<string>('');
   const [pointCount, setPointCount] = useState<number>(10);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const features = featureValues.map(val => parseFloat(val));
+    const features = featureValues.map(v => parseFloat(v));
     const y = parseFloat(yValue);
     
     if (features.every(x => !isNaN(x)) && !isNaN(y)) {
-      onAddPoint();
-      setFeatureValues(Array(featureCount).fill(''));
+      const newPoint: MultipleNewPoint = {
+        features: featureValues,
+        output: yValue
+      };
+      onPointAdd(newPoint);
+      setFeatureValues(Array(2).fill(''));
       setYValue('');
     }
   };
@@ -42,7 +34,7 @@ export const MultipleDataInputForm: React.FC<MultipleDataInputFormProps> = ({
     <div className="space-y-6">
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         <div className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 {featureValues.map((value, index) => (
@@ -59,7 +51,6 @@ export const MultipleDataInputForm: React.FC<MultipleDataInputFormProps> = ({
                         const newValues = [...featureValues];
                         newValues[index] = e.target.value;
                         setFeatureValues(newValues);
-                        onInputChange(`feature${index}`, e.target.value);
                       }}
                       className="block w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
                       placeholder={`Enter Feature ${index + 1} value`}
@@ -78,7 +69,6 @@ export const MultipleDataInputForm: React.FC<MultipleDataInputFormProps> = ({
                   value={yValue}
                   onChange={(e) => {
                     setYValue(e.target.value);
-                    onInputChange('yValue', e.target.value);
                   }}
                   className="block w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
                   placeholder="Enter Y value"
@@ -124,7 +114,7 @@ export const MultipleDataInputForm: React.FC<MultipleDataInputFormProps> = ({
                 </div>
               </div>
               <button
-                onClick={() => onGeneratePoints(pointCount)}
+                onClick={() => onGeneratePoints && onGeneratePoints(pointCount)}
                 className="px-6 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200 transition-colors flex items-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

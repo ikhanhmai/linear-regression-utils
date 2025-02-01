@@ -11,10 +11,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { DataPoint } from '../types';
+import { SimpleDataPoint } from '../types';
 
 interface SimpleRegressionChartProps {
-  dataPoints: DataPoint[];
+  dataPoints: SimpleDataPoint[];
   regressionLine: { x: number; yRegression: number }[];
   domain: {
     x: [number, number];

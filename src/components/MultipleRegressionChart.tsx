@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import {
+import { 
   ComposedChart,
   Line,
   Scatter,
@@ -11,7 +11,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { MultipleDataPoint } from '../types';
 
 interface MultipleRegressionChartProps {
   dataPoints: { x: number; y: number }[];

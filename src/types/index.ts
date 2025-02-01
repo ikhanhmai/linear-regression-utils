@@ -25,6 +25,7 @@ export interface RegressionStats {
   dfRegression: number;  // Degrees of freedom for regression
   dfResidual: number;  // Degrees of freedom for residuals
   dfTotal: number;  // Total degrees of freedom
+  coefficients: number[];  // Array of coefficients for multiple regression
 }
 
 export interface ChartDomain {
@@ -35,4 +36,11 @@ export interface ChartDomain {
 export interface MultipleDataPoint {
   x: number[];
   y: number;
+}
+
+export interface NewPoint {
+  x?: string;
+  y: string;
+  x1?: string;
+  x2?: string;
 }

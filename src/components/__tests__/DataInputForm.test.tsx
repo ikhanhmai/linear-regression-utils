@@ -5,6 +5,7 @@ import { DataInputForm } from '../DataInputForm'
 describe('DataInputForm', () => {
   const mockOnAddPoint = jest.fn()
   const mockOnGeneratePoints = jest.fn()
+  const mockOnInputChange = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -12,49 +13,69 @@ describe('DataInputForm', () => {
 
   it('allows users to input data points', async () => {
     const { user } = render(
-      <DataInputForm onAddPoint={mockOnAddPoint} onGeneratePoints={mockOnGeneratePoints} />
+      <DataInputForm 
+        newPoint={{ x: '2', y: '3' }}
+        onAddPoint={mockOnAddPoint}
+        onInputChange={mockOnInputChange}
+        onGeneratePoints={mockOnGeneratePoints}
+      />
     )
 
     // Find input fields
-    const xInput = screen.getByLabelText(/x/i)
-    const yInput = screen.getByLabelText(/y/i)
-    const addButton = screen.getByRole('button', { name: /add point/i })
+    const xInput = screen.getByLabelText('X Value')
+    const yInput = screen.getByLabelText('Y Value')
 
-    // Input values
-    await user.type(xInput, '2')
-    await user.type(yInput, '4')
-    await user.click(addButton)
+    // Verify input values are displayed
+    expect(xInput).toHaveValue(2)
+    expect(yInput).toHaveValue(3)
 
-    // Check if onAddPoint was called with correct values
-    expect(mockOnAddPoint).toHaveBeenCalledWith({ x: 2, y: 4 })
+    // Submit the form
+    const submitButton = screen.getByText('Add Point')
+    await user.click(submitButton)
+
+    expect(mockOnAddPoint).toHaveBeenCalled()
   })
 
   it('validates numeric input', async () => {
     const { user } = render(
-      <DataInputForm onAddPoint={mockOnAddPoint} onGeneratePoints={mockOnGeneratePoints} />
+      <DataInputForm 
+        newPoint={{ x: '', y: '' }}
+        onAddPoint={mockOnAddPoint}
+        onInputChange={mockOnInputChange}
+        onGeneratePoints={mockOnGeneratePoints}
+      />
     )
 
-    const xInput = screen.getByLabelText(/x/i)
-    const yInput = screen.getByLabelText(/y/i)
-    const addButton = screen.getByRole('button', { name: /add point/i })
+    // Find input fields
+    const xInput = screen.getByLabelText('X Value')
+    const yInput = screen.getByLabelText('Y Value')
 
-    // Try invalid input
+    // Test non-numeric input
     await user.type(xInput, 'abc')
-    await user.type(yInput, '4')
-    await user.click(addButton)
+    await user.type(yInput, 'def')
 
-    // Check that onAddPoint was not called with invalid input
+    // Submit the form
+    const submitButton = screen.getByText('Add Point')
+    await user.click(submitButton)
+
+    // Verify that onAddPoint wasn't called with invalid input
     expect(mockOnAddPoint).not.toHaveBeenCalled()
   })
 
   it('allows generating random points', async () => {
     const { user } = render(
-      <DataInputForm onAddPoint={mockOnAddPoint} onGeneratePoints={mockOnGeneratePoints} />
+      <DataInputForm 
+        newPoint={{ x: '', y: '' }}
+        onAddPoint={mockOnAddPoint}
+        onInputChange={mockOnInputChange}
+        onGeneratePoints={mockOnGeneratePoints}
+      />
     )
 
-    const generateButton = screen.getByRole('button', { name: /generate/i })
+    // Find and click the generate points button
+    const generateButton = screen.getByText('Generate Points')
     await user.click(generateButton)
 
-    expect(mockOnGeneratePoints).toHaveBeenCalled()
+    expect(mockOnGeneratePoints).toHaveBeenCalledWith(10) // Default value
   })
 })

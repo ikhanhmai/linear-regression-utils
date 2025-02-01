@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { DataPoint } from '../types';
+import { SimpleNewPoint } from '../types';
 import { Tooltip } from './Tooltip';
 
 interface DataInputFormProps {
-  newPoint: NewPoint;
+  newPoint: SimpleNewPoint;
   onAddPoint: () => void;
   onInputChange: (field: string, value: string) => void;
   onGeneratePoints: (count: number) => void;
@@ -17,74 +17,59 @@ export const DataInputForm: React.FC<DataInputFormProps> = ({
   onInputChange,
   onGeneratePoints,
 }) => {
-  const [xValue, setXValue] = useState<string>('');
-  const [yValue, setYValue] = useState<string>('');
   const [pointCount, setPointCount] = useState<number>(10);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const x = parseFloat(xValue);
-    const y = parseFloat(yValue);
-    
-    if (!isNaN(x) && !isNaN(y)) {
-      onAddPoint();
-      setXValue('');
-      setYValue('');
-    }
+    onAddPoint();
   };
 
   return (
     <div className="space-y-6">
-      {/* Data Input Section */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         <div className="space-y-6">
-          {/* Manual Point Input */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label htmlFor="xValue" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="x" className="block text-sm font-medium text-gray-700">
                   X Value
+                  <Tooltip content="Enter a numeric value for the x-coordinate" />
                 </label>
                 <input
-                  id="xValue"
                   type="number"
-                  step="any"
-                  value={xValue}
-                  onChange={(e) => {
-                    setXValue(e.target.value);
-                    onInputChange('x', e.target.value);
-                  }}
+                  id="x"
+                  value={newPoint.feature}
+                  onChange={(e) => onInputChange('feature', e.target.value)}
                   className="block w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
-                  placeholder="Enter X coordinate"
+                  step="any"
+                  placeholder="Enter X value"
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="yValue" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="y" className="block text-sm font-medium text-gray-700">
                   Y Value
+                  <Tooltip content="Enter a numeric value for the y-coordinate" />
                 </label>
                 <input
-                  id="yValue"
                   type="number"
-                  step="any"
-                  value={yValue}
-                  onChange={(e) => {
-                    setYValue(e.target.value);
-                    onInputChange('y', e.target.value);
-                  }}
+                  id="y"
+                  value={newPoint.output}
+                  onChange={(e) => onInputChange('output', e.target.value)}
                   className="block w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
-                  placeholder="Enter Y coordinate"
+                  step="any"
+                  placeholder="Enter Y value"
                 />
               </div>
             </div>
             <button
               type="submit"
-              className="w-full md:w-auto px-6 py-2.5 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-colors"
+              className="w-full px-4 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
               Add Point
             </button>
           </form>
 
-          {/* Random Points Generator */}
+          {/* Random Data Generation */}
           <div className="border-t border-gray-100 pt-6">
             <h3 className="text-sm font-medium text-gray-700 mb-4 flex items-center gap-2">
               Generate Random Points
