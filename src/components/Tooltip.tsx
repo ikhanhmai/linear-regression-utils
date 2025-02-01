@@ -15,6 +15,9 @@ import {
   FloatingArrow,
 } from '@floating-ui/react';
 
+// Create a shared portal ID for all tooltips
+const TOOLTIP_PORTAL_ID = 'tooltip-portal';
+
 interface TooltipProps {
   content: string;
 }
@@ -58,7 +61,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content }) => {
         <InfoIcon className="h-4 w-4" />
       </button>
 
-      <FloatingPortal>
+      <FloatingPortal id={TOOLTIP_PORTAL_ID}>
         {isOpen && (
           <div
             ref={refs.setFloating}

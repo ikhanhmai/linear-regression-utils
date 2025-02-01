@@ -31,3 +31,8 @@ export interface ChartDomain {
   x: [number, number];
   y: [number, number];
 }
+
+export interface MultipleDataPoint {
+  x: number[];
+  y: number;
+}
