@@ -42,3 +42,8 @@ export interface RegressionStats {
   dfTotal: number;  // Total degrees of freedom
   coefficients: number[];  // Array of coefficients for multiple regression
 }
+
+export interface ChartDomain {
+  x: [number, number];
+  y: [number, number];
+}
