@@ -12,23 +12,57 @@
 
 # testing
 /coverage
+/packages/*/coverage
 
 # next.js
 /.next/
 /out/
+/packages/web/.next/
+/packages/web/out/
+/packages/web/.turbo
+/packages/web/build
+/packages/web/node_modules
+/packages/web/.env*.local
+/packages/web/coverage
+/packages/web/storybook-static
+/packages/web/analyze
 
-# production
+# production builds
 /build
+/dist
+/packages/*/dist
+/packages/*/build
+/packages/desktop/release
+/packages/desktop/out
+
+# Electron builder output
+*.dmg
+*.exe
+*.deb
+*.rpm
+*.AppImage
+*.snap
+*.blockmap
+*.zip
+/packages/desktop/.webpack
+/packages/desktop/release
+latest*.yml
+*-latest*.yml
 
 # misc
 .DS_Store
 *.pem
+.idea/
+.vscode/
+*.swp
+*.swo
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+debug.log
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -39,6 +73,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# turbo
+.turbo
 
 # windsurf rules
 .windsurfrules
