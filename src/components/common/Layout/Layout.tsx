@@ -15,17 +15,17 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeItem, onSelectIt
   const [activeSection, setActiveSection] = useState<'why-regression' | 'user-guide' | 'technical-details' | 'glossary'>('why-regression');
 
   return (
-    <div className="flex h-screen overflow-hidden flex-col" data-testid="layout-container">
+    <div className="flex h-screen overflow-hidden flex-col bg-[#121212]" data-testid="layout-container">
       <div className="flex flex-1 overflow-hidden">
         {/* Mobile menu button */}
         <button
           data-testid="mobile-menu-button"
-          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-white shadow-md"
+          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-[#1E1E1E] border border-gray-700 shadow-md"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
           <svg
-            className="w-6 h-6 text-gray-600"
+            className="w-6 h-6 text-gray-400"
             fill="currentColor"
             viewBox="0 0 448 512"
             xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +42,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeItem, onSelectIt
         {isMobileMenuOpen && (
           <div
             data-testid="mobile-overlay"
-            className="lg:hidden fixed inset-0 z-30 bg-black bg-opacity-50"
+            className="lg:hidden fixed inset-0 z-30 bg-black bg-opacity-70"
             onClick={() => setIsMobileMenuOpen(false)}
           />
         )}
@@ -53,7 +53,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeItem, onSelectIt
           data-testid="sidebar"
           className={`fixed lg:static inset-y-0 left-0 z-40 transform ${
             isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          } lg:translate-x-0 transition-transform duration-300 ease-in-out w-64 flex-shrink-0 border-r border-gray-200 bg-white pt-16 lg:pt-0`}
+          } lg:translate-x-0 transition-transform duration-300 ease-in-out w-64 flex-shrink-0 border-r border-gray-700 bg-[#1E1E1E] pt-16 lg:pt-0`}
         >
           <Sidebar 
             activeItem={activeItem}
@@ -66,7 +66,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeItem, onSelectIt
         </aside>
 
         {/* Main content */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto bg-[#121212]">
           <div data-testid="main-content">
             <MainContent activeItem={activeItem} activeSection={activeSection}>
               {children}

@@ -32,7 +32,7 @@ export const SimpleRegressionChart: React.FC<SimpleRegressionChartProps> = ({
   const chartHeight = 400;
 
   return (
-    <div className="w-full bg-white p-6 rounded-xl shadow-sm border border-gray-100" style={{ height: chartHeight }}>
+    <div className="w-full bg-[#1E1E1E] p-6 rounded-xl shadow-sm border border-gray-700" style={{ height: chartHeight }}>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           margin={{
@@ -42,7 +42,7 @@ export const SimpleRegressionChart: React.FC<SimpleRegressionChartProps> = ({
             left: 20,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis
             type="number"
             dataKey="x"
@@ -50,6 +50,7 @@ export const SimpleRegressionChart: React.FC<SimpleRegressionChartProps> = ({
             domain={domain.x}
             ticks={generateTicks(domain.x[0], domain.x[1])}
             tickFormatter={(value) => value.toFixed(2)}
+            stroke="#9CA3AF"
           />
           <YAxis
             type="number"
@@ -58,18 +59,26 @@ export const SimpleRegressionChart: React.FC<SimpleRegressionChartProps> = ({
             domain={domain.y}
             ticks={generateTicks(domain.y[0], domain.y[1])}
             tickFormatter={(value) => value.toFixed(2)}
+            stroke="#9CA3AF"
           />
           <Tooltip
             cursor={{ strokeDasharray: '3 3' }}
+            contentStyle={{
+              backgroundColor: '#2D2D2D',
+              border: '1px solid #4B5563',
+              borderRadius: '0.375rem',
+            }}
+            itemStyle={{ color: '#E5E7EB' }}
+            labelStyle={{ color: '#E5E7EB' }}
             content={({ payload }) => {
               if (payload && payload.length > 0) {
                 const point = payload[0].payload;
                 return (
-                  <div className="bg-white p-2 border border-gray-200 rounded shadow-sm">
-                    <p className="text-sm">
+                  <div className="bg-[#2D2D2D] p-2 border border-gray-600 rounded shadow-sm">
+                    <p className="text-sm text-gray-200">
                       <span className="font-medium">X:</span> {point.x.toFixed(2)}
                     </p>
-                    <p className="text-sm">
+                    <p className="text-sm text-gray-200">
                       <span className="font-medium">Y:</span>{' '}
                       {(point.y || point.yRegression).toFixed(2)}
                     </p>
@@ -84,7 +93,7 @@ export const SimpleRegressionChart: React.FC<SimpleRegressionChartProps> = ({
           <Scatter
             name="Points"
             data={dataPoints}
-            fill="#4F46E5"
+            fill="#60A5FA"
             fillOpacity={0.6}
             shape="circle"
           />
@@ -94,7 +103,7 @@ export const SimpleRegressionChart: React.FC<SimpleRegressionChartProps> = ({
             type="monotone"
             dataKey="yRegression"
             data={regressionLine}
-            stroke="#4F46E5"
+            stroke="#60A5FA"
             strokeWidth={2}
             dot={false}
             activeDot={false}

@@ -26,7 +26,7 @@ export const MainContent: React.FC<MainContentProps> = ({ activeItem, activeSect
   };
 
   return (
-    <main className="flex flex-col min-h-0 h-full overflow-y-auto bg-gray-50">
+    <main className="flex flex-col min-h-0 h-full overflow-y-auto bg-[#121212]">
       <div className="container mx-auto px-6 py-6 max-w-7xl flex flex-col flex-1 min-h-0">
         {renderContent()}
       </div>
