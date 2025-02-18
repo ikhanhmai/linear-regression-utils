@@ -1,84 +1,136 @@
 # Linear Regression Utils
 
-A React application for performing and visualizing linear regression analysis.
+A modern, interactive web application for exploring and understanding linear regression concepts.
 
-## Project Structure
+## Project Overview
 
-```
-linear-regression-utils/
-├── src/
-│   ├── components/
-│   │   ├── DataInputForm.tsx       # Form for inputting data points
-│   │   ├── RegressionVisualizer.tsx # Main visualization component
-│   │   ├── ScatterPlot.tsx        # Scatter plot visualization
-│   │   ├── StatsDisplay.tsx       # Display regression statistics
-│   │   └── Tooltip.tsx            # Reusable tooltip component
-│   ├── hooks/
-│   │   ├── useSimpleRegression.ts  # Hook for simple linear regression
-│   │   └── useMultipleRegression.ts # Hook for multiple linear regression
-│   ├── utils/
-│   │   └── statistics.ts           # Statistical calculation utilities
-│   └── types/
-│       └── index.ts                # TypeScript type definitions
-```
+This application provides an intuitive interface for learning and experimenting with linear regression. Users can input data points, visualize regression lines, and understand key statistical measures.
 
-## Components
+### Key Features
 
-### DataInputForm
-- Handles user input for x and y coordinates
-- Validates numeric input
-- Provides option to generate random points
-- Uses Tailwind CSS for styling
+- Interactive data point input and visualization
+- Real-time regression line updates
+- Statistical measure calculations (R², TSS, MSS, RSS)
+- Educational resources and explanations
+- Dark theme UI for better visibility and reduced eye strain
 
-### RegressionVisualizer
-- Main component orchestrating the regression analysis
-- Manages data input and visualization
-- Supports both simple and multiple regression types
-- Displays regression statistics and scatter plot
+## Technical Stack
 
-### ScatterPlot
-- Visualizes data points and regression line using Recharts
-- Handles undefined regression line gracefully
-- Provides interactive tooltips and legend
+- **Frontend Framework**: React with TypeScript
+- **Styling**: Tailwind CSS
+- **Visualization**: Recharts
+- **State Management**: React Hooks
+- **Testing**: React Testing Library & Jest
 
-### StatsDisplay
-- Shows key regression statistics:
-  - Line parameters (slope, intercept)
-  - R-squared value
-  - P-values
-  - Standard errors
-  - T-statistics
-- Includes tooltips for statistical explanations
+## Component Architecture
+
+### Core Components
+
+1. **RegressionVisualizer** (`RegressionVisualizer.tsx`)
+   - Main container component
+   - Manages regression state and calculations
+   - Coordinates child components
+
+2. **DataInputForm** (`DataInputForm.tsx`)
+   - Handles user input for data points
+   - Input validation and formatting
+   - Styled with dark theme colors and consistent spacing
+
+3. **SimpleRegressionChart** (`SimpleRegressionChart.tsx`)
+   - Visualizes data points and regression line
+   - Uses Recharts for rendering
+   - Dark theme compatible with readable grid lines and data points
+
+4. **StatsDisplay** (`StatsDisplay.tsx`)
+   - Shows regression statistics
+   - Tooltips for explanations
+   - Styled for dark theme readability
+
+5. **ManualControls** (`ManualControls.tsx`)
+   - Manual regression line adjustment
+   - Interactive slope and intercept controls
+   - Dark theme UI elements
+
+### Layout Components
+
+1. **Layout** (`Layout.tsx`)
+   - Main layout structure
+   - Dark theme background and borders
+   - Responsive design
+
+2. **Sidebar** (`Sidebar.tsx`)
+   - Navigation menu
+   - Dark theme styling with hover states
+   - Section selection
+
+3. **MainContent** (`MainContent.tsx`)
+   - Content area management
+   - Dark theme background
+   - Proper spacing and padding
+
+### UI Components
+
+1. **Tooltip** (`Tooltip.tsx`)
+   - Reusable tooltip component
+   - Dark theme styling
+   - Consistent with overall design
+
+2. **ExplanationSection** (`ExplanationSection.tsx`)
+   - Educational content display
+   - Dark theme text and background colors
+   - Organized learning resources
+
+## Styling Guidelines
+
+### Dark Theme Colors
+- Background: #121212 (Main), #1E1E1E (Components)
+- Text: #E5E7EB (Primary), #9CA3AF (Secondary)
+- Borders: #374151 (Dividers), #4B5563 (Containers)
+- Accents: #60A5FA (Primary), #3B82F6 (Hover)
+
+### Component Styling
+- Consistent border radius (rounded-md)
+- Proper spacing (margin and padding)
+- Hover and focus states
+- Smooth transitions
 
 ## Recent Changes
 
-### Bug Fixes
-1. Fixed ScatterPlot to handle undefined regression line
-2. Updated DataInputForm validation logic
-3. Enhanced error handling in regression calculations
+1. **Dark Theme Implementation**
+   - Updated all components with dark theme colors
+   - Enhanced contrast for better readability
+   - Consistent styling across components
+   - Improved visual hierarchy
 
-### UI Improvements
-1. Added tooltips for statistical explanations
-2. Improved form validation feedback
-3. Enhanced visualization responsiveness
+2. **UI Enhancements**
+   - Refined component spacing
+   - Updated hover and focus states
+   - Improved button and input styling
+   - Enhanced chart readability
 
-### Testing
-1. Added behavior tests for components
-2. Improved test coverage for edge cases
-3. Implemented mock data for regression hooks
+## Future Improvements
 
-## Next Steps
-1. Address remaining test failures
-2. Add more statistical analysis features
-3. Enhance data visualization options
-4. Improve error handling and user feedback
+1. **Theme Toggle**
+   - Add light/dark theme switch
+   - Persist theme preference
 
-## Development Guidelines
-1. Use behavior testing with React Testing Library
-2. Maintain backwards compatibility
-3. Follow React best practices
-4. Use TypeScript for type safety
-5. Implement responsive design with Tailwind CSS
+2. **Accessibility**
+   - Enhance keyboard navigation
+   - Improve screen reader support
+   - Add ARIA labels
 
----
-Last Updated: 2025-02-18
+3. **Additional Features**
+   - Multiple regression analysis
+   - Data export/import
+   - More statistical measures
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License - See LICENSE file for details

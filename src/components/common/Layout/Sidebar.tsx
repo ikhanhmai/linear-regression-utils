@@ -84,9 +84,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
       <button
         onClick={handleClick}
         className={`
-          w-full text-left px-2 py-2 rounded-md
+          w-full text-left px-2 py-2 rounded-md transition-colors
           ${level > 0 ? 'pl-10' : 'font-medium'}
-          ${activeItem === item.id ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}
+          ${activeItem === item.id 
+            ? 'bg-blue-900/30 text-blue-400' 
+            : 'text-gray-400 hover:bg-gray-800/50 hover:text-gray-300'
+          }
           flex items-center space-x-2
         `}
       >
@@ -114,22 +117,17 @@ const MenuItem: React.FC<MenuItemProps> = ({
 export const Sidebar: React.FC<SidebarProps> = ({ activeItem, onSelectItem, onSectionChange }) => {
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 p-4 overflow-y-auto">
-        <h1 className="text-xl font-semibold text-gray-900 mb-6">
-          Linear Regression
-        </h1>
-        <nav className="space-y-1">
-          {menuItems.map((item) => (
-            <MenuItem
-              key={item.id}
-              item={item}
-              activeItem={activeItem}
-              onSelectItem={onSelectItem}
-              onSectionChange={onSectionChange}
-            />
-          ))}
-        </nav>
-      </div>
+      <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+        {menuItems.map((item) => (
+          <MenuItem
+            key={item.id}
+            item={item}
+            activeItem={activeItem}
+            onSelectItem={onSelectItem}
+            onSectionChange={onSectionChange}
+          />
+        ))}
+      </nav>
       <Footer />
     </div>
   );

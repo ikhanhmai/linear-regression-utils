@@ -55,7 +55,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content }) => {
     <>
       <button
         ref={refs.setReference}
-        className="text-gray-400 hover:text-gray-600 transition-colors ml-1 focus:outline-none"
+        className="text-gray-500 hover:text-gray-400 transition-colors ml-1 focus:outline-none"
         {...getReferenceProps()}
       >
         <InfoIcon className="h-4 w-4" />
@@ -69,14 +69,14 @@ export const Tooltip: React.FC<TooltipProps> = ({ content }) => {
             style={floatingStyles}
             {...getFloatingProps()}
           >
-            <div className="relative bg-white text-gray-700 rounded-lg shadow-lg p-3 text-sm border border-gray-200 min-w-[16rem] max-w-xs">
+            <div className="relative bg-gray-800 text-gray-200 rounded-lg shadow-lg p-3 text-sm border border-gray-700 min-w-[16rem] max-w-xs">
               <div className="whitespace-pre-line">
                 {formattedContent}
               </div>
               <FloatingArrow
                 ref={arrowRef}
                 context={context}
-                className="fill-white"
+                className="fill-gray-800"
                 tipRadius={1}
               />
             </div>
