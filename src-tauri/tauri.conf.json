@@ -1,46 +1,51 @@
 {
-  "$schema": "https://schema.tauri.app/config/2.0.0-rc",
-  "productName": "linear-regression-utils",
-  "version": "0.1.0",
-  "identifier": "com.ikhanhmai.linear-regression-utils",
+  "$schema": "https://schema.tauri.app/config/1.5.0",
   "build": {
-    "frontendDist": "../out",
-    "devUrl": "http://localhost:3000",
+    "beforeBuildCommand": "yarn build",
     "beforeDevCommand": "yarn dev",
-    "beforeBuildCommand": "yarn build"
+    "devPath": "http://localhost:3000",
+    "distDir": "../out"
   },
-  "app": {
-    "windows": [
-      {
-        "title": "linear-regression-utils",
-        "width": 1024,
-        "height": 768,
-        "resizable": true,
-        "fullscreen": false,
-        "transparent": false,
-        "decorations": true
+  "package": {
+    "productName": "linear-regression-utils",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.ikhanhmai.linear-regression-utils",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "macOS": {
+        "frameworks": [],
+        "minimumSystemVersion": "10.13",
+        "exceptionDomain": "",
+        "signingIdentity": null,
+        "entitlements": null
       }
-    ],
+    },
     "security": {
       "csp": null
-    }
-  },
-  "bundle": {
-    "active": true,
-    "targets": "all",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ],
-    "macOS": {
-      "frameworks": [],
-      "minimumSystemVersion": "10.13",
-      "exceptionDomain": "",
-      "signingIdentity": null,
-      "entitlements": null
-    }
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 768,
+        "resizable": true,
+        "title": "linear-regression-utils",
+        "width": 1024,
+        "decorations": true,
+        "transparent": false
+      }
+    ]
   }
 }

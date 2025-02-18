@@ -96,7 +96,7 @@ export const ExplanationSection: React.FC<ExplanationSectionProps> = ({ activeSe
                 Hover over points to see their exact coordinates
               </li>
               <li>
-                Use the tooltips (ℹ️) next to statistics for detailed explanations
+                Use the tooltips (&#8467;) next to statistics for detailed explanations
               </li>
               <li>
                 Try adjusting the line manually to understand how different slopes and intercepts affect the fit
@@ -153,7 +153,7 @@ export const ExplanationSection: React.FC<ExplanationSectionProps> = ({ activeSe
               </div>
               <div>
                 <dt className="font-medium text-gray-200">Slope (β₁)</dt>
-                <dd className="mt-1">The change in y for a one-unit change in x. Represents the relationship's strength and direction.</dd>
+                <dd className="mt-1">The change in y for a one-unit change in x. Represents the relationship&#39;s strength and direction.</dd>
               </div>
               <div>
                 <dt className="font-medium text-gray-200">Intercept (β₀)</dt>
